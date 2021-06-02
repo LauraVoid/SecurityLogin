@@ -1,6 +1,6 @@
 package model;
 
-public class Users {
+public class User {
 	
 	private String name;
 	
@@ -11,7 +11,7 @@ public class Users {
 	private String lastLogin;
 	
 	
-	public Users(String name, boolean isAdmin, String password, String lastLogin) {
+	public User(String name, boolean isAdmin, String password, String lastLogin) {
 		super();
 		this.name = name;
 		this.isAdmin = isAdmin;
