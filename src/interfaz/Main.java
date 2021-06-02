@@ -22,7 +22,7 @@ public class Main {
 		
 	}
 
-	public void menu() throws IOException {
+	public void menu() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int value =0;
 		while(value<3) {
@@ -182,7 +182,7 @@ public class Main {
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		Main main = new Main();
 		
 		try {
