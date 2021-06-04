@@ -99,6 +99,8 @@ public class Main {
 					String newPass= br.readLine();
 					boolean status =createNewUser(newUser,newPass,"false");
 					if(status) {
+						//Agregar hora de acceso en accesos.txt
+						//User unico
 						System.out.println("usuario creado correctamente");
 						
 					}else {
@@ -326,7 +328,7 @@ public class Main {
 		
 		return credentials;
 	}
-	
+	//Juanma
 	public void menuAdmin() throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int value = 0;
@@ -359,7 +361,7 @@ public class Main {
 		
 		
 	}
-	
+	//Douglas +user unico
 	public void menuUser(String username) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int value = 0;
