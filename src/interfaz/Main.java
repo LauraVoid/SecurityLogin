@@ -38,7 +38,7 @@ public class Main {
 			try {
 				value= Integer.parseInt(br.readLine());
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				System.err.println("Ingresa un valor válido");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -182,10 +182,13 @@ public class Main {
 	            pw = new PrintWriter(fichero);
 	            String securePass = security.generatePassword(password);	      
 	           
-	           pw.println(user +","+securePass+","+isAdmin);          
+	            if(!existUser(user)) {
+	            	pw.println(user +","+securePass+","+isAdmin);
+	            }else {
+	            	System.err.println("\n"+"El usuario ingresado ya existe. Intenta con otro nombre de usuario"+ "\n");
+	            }
 	                      
-	            
-
+	                      
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {
@@ -202,6 +205,46 @@ public class Main {
 		
 		return result;
 	}
+	
+	/**
+	 * Se encarga de verificar si un username ya existe en la BD
+	 * @param username
+	 * @return false en caso de que no exista. true si existe.
+	 */
+	public boolean existUser(String username) {
+		boolean exist = false;
+		
+		try {
+			
+			String linea;
+			boolean wasFound = false;
+			
+			File archivo = null;
+			FileReader fichero = null;
+	        BufferedReader lector = null;
+	        
+	        archivo = new File ("src/interfaz/passwd.txt");
+	        fichero = new FileReader(archivo);
+	        lector = new BufferedReader(fichero);
+	        
+	       
+	        while((linea = lector.readLine()) != null && !wasFound) {
+	        	String[] user = linea.split(",");		        	
+	        	if(user[0].equalsIgnoreCase(username)) {
+	        		wasFound = true;
+	        		exist = true;
+	        	}			        	
+	        }
+	        lector.close();
+	        
+		}catch(Exception e) {
+			System.err.println("\n"+"Ha ocurrido un error. Intenta nuevamente"+"\n");
+		}
+		
+		
+		return exist;
+	}
+	
 	/**
 	 * Metodo que permite almacenar el ultimo acceso del usuario cuando cierra sesion
 	 * @param username el nombre del usuario que desea cerrar sesion
@@ -361,32 +404,126 @@ public class Main {
 		
 		
 	}
-	//Douglas +user unico
+	
+	/**
+	 * Método que muestra el menú del usuario, y realiza todas sus funciones
+	 * tanto la de consultar su último acceso en la BD y cambiar su contraseña
+	 * @param username
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
 	public void menuUser(String username) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int value = 0;
 		while(value<4) {
 			System.out.println("Bienvenido");
 			System.out.println("1. Consultar ultimo acceso \n2. Cambiar su contraseña \n3. Cerrar sesion");
-			value= Integer.parseInt(br.readLine());
+			
+			try {
+				value= Integer.parseInt(br.readLine());
+			}catch(Exception e) {
+				System.err.println("Ingresa un valor válido");
+			}
+			
 			
 			switch(value) {
 			
-			case 1:
-				System.out.println("Su ultimo acceso fue");
-				//TODO
+			case 1:				
+				try {
+					
+					String linea;
+					boolean wasFound = false;
+					
+					File archivo = null;
+					FileReader fichero = null;
+			        BufferedReader lector = null;
+			        
+			        archivo = new File ("src/interfaz/accesos.txt");
+			        fichero = new FileReader(archivo);
+			        lector = new BufferedReader(fichero);
+			        
+			       
+			        while((linea = lector.readLine()) != null && !wasFound) {
+			        	String[] user = linea.split(",");		        	
+			        	if(user[0].equalsIgnoreCase(username)) {
+			        		String[] date = user[1].split(" ");
+			        		System.out.println("\n"+"Te conectaste el día: "+date[0]+"\n"+"A las: "+date[1]+"\n");
+			        		wasFound = true;
+			        	}			        	
+			        }
+			        lector.close();
+			        
+				}catch(Exception e) {
+					System.err.println("\n"+"No ha sido posible. Intenta nuevamente"+"\n");
+				}
 				break;
 			case 2:
 				System.out.println("Ingrese su contraseña nueva");
-				//TODO
-				String passwd= br.readLine();				
+				String passwd= br.readLine();
+				
+				try {
+					
+					String linea;
+					String ruta = "src/interfaz/passwdcopia.txt";
+					File nuevoArchivo = new File(ruta);
+					
+					
+					//Leer archivo existente
+					File archivo = null;
+					FileReader fichero = null;
+			        BufferedReader lector = null;
+			        
+			        //Escribir archivo actualizado
+			        FileWriter ficheroWrite = null;
+			        PrintWriter escritor = null;
+			        
+			        archivo = new File ("src/interfaz/passwd.txt");
+			        
+			        if(archivo.exists() && passwd != null) {
+	        	
+			        	fichero = new FileReader(archivo);
+			        	lector = new BufferedReader(fichero);
+				        
+			        	if(nuevoArchivo.exists()) {
+			        		System.err.println("\n"+"Ha ocurrido un problema. Intenta nuevamente"+"\n");
+			        	}else {
+			        		nuevoArchivo.createNewFile();
+				        	ficheroWrite = new FileWriter(nuevoArchivo);
+				        	escritor = new PrintWriter(ficheroWrite);
+			        		while((linea = lector.readLine()) != null) {
+					       				        	
+					        	String[] user = linea.split(",");		        	
+					        	if(user[0].equalsIgnoreCase(username)) {
+					        		escritor.println(user[0]+","+security.generatePassword(passwd)+","+"false");
+					        	}else {
+					        		escritor.println(linea);
+					        	}
+					        }
+			        		
+					        escritor.close();
+					        lector.close();
+					        
+			        		//Renombrar archivo.
+			        		archivo.delete();
+			        		nuevoArchivo.renameTo(archivo);
+			        		System.out.println("\n"+"Contraseña cambiada con éxito"+"\n");
+			        	}
+			        }else {
+			        	System.err.println("\n"+ "Ha ocurrido un error. Intenta nuevamente"+"\n");
+			        }
+					
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			case 3:
 				cerrarSesion(username);
 				System.out.println("Su sesion ha finalizado");
 				value = 4;
 				break;
-			
+			default:
+				System.err.println("Ingresa un número válido. Intenta nuevamente");
 			}
 			
 			
