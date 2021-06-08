@@ -22,6 +22,8 @@ Durante el proceso se definieron diferentes métodos que permitan la solución d
 | validateAmountAdmin | Permite conocer si ya existe un usuario tipo adinistrador dentro de la aplicación |
 | cerrarSesion | Cierra la sesion de un usuario, almacenando su ultimo acceso dentro de la plataforma |
 | validateCredentials | Valida las credenciales de acceso de un usuario |
+| deleteUser | Elimina un usuario especificado por parametro |
+| deleteUserPassword | Elimina la contraseña de un usuario existente |
 
 En el grupo se concluyó que la mejor forma para manejar los usuarios consistía através de archivos de texto. Esto por la facilidad que tienen dentro del lenguaje java y por que todos conociamos el manejo de archivos.
 
@@ -32,10 +34,10 @@ Para emplear el algoritmo de seguridad sobre las contraseñas, fue necesario rea
 | Método | Descripción |
 | :--- | :--- |
 | generatePassword | Permite generar una contraseña segura, basado en la contraseña simple que ingresa el usuario. |
-| toHex |  |
-| getSalt |  |
+| toHex | Encodear a hexadecimal el hash y el salt |
+| getSalt | Se encagar de generar un número random para realizar el hash a la contraseña. Este numero se almacena con la contraseña. |
 | validatePassword | Valida la contraseña debil con la almacenada dentro del archivo de texto. |
-| fromHex |  |
+| fromHex | Desencodear de hexadecimal a string |
 
 ### Archivos
 
