@@ -191,8 +191,10 @@ public class Main {
 
 			if (!existUser(user)) {
 				pw.println(user + "," + securePass + "," + isAdmin);
+				result = true;
 			} else {
 				System.err.println("\n" + "El usuario ingresado ya existe. Intenta con otro nombre de usuario" + "\n");
+				result= false;
 			}
 
 		} catch (Exception e) {
@@ -200,9 +202,7 @@ public class Main {
 		} finally {
 			try {
 				if (null != fichero)
-					fichero.close();
-
-				result = true;
+					fichero.close();				
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
@@ -481,7 +481,7 @@ public class Main {
 	public void menuAdmin() throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int value = 0;
-		while (value < 3) {
+		while (value < 4) {
 			System.out.println("Bienvenido admin");
 			System.out.println(
 					"1. Consultar nombres existentes \n2. Eliminar un usuario \n3. Eliminar una contraseña de usuario");
